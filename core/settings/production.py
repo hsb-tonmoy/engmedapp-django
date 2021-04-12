@@ -12,5 +12,6 @@ SESSION_COOKIE_SECURE = True
 CORS_ALLOWED_ORIGINS = [
 
     "https://lucid-visvesvaraya-8a085a.netlify.app",
+    "24.176.53.95"
 
 ]
