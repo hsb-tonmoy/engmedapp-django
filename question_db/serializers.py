@@ -41,6 +41,24 @@ class SessionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CommentListSerializer(serializers.ModelSerializer):
+    author = AccountSerializer(required=False, many=False, read_only=False)
+
+    class Meta:
+        model = Comment
+        fields = "__all__"
+
+
+class ExplanationListSerializer(serializers.ModelSerializer):
+    author = AccountSerializer(required=False, many=False, read_only=False)
+    comments = CommentListSerializer(many=True, read_only=False)
+
+    class Meta:
+        model = Explanation
+        fields = ('question', 'excerpt', 'author',
+                  'published', 'status', 'comments')
+
+
 class QuestionListSerializer(serializers.ModelSerializer):
 
     board = BoardSerializer(many=False, read_only=False)
@@ -62,6 +80,7 @@ class SingleQuestionSerializer(WritableNestedModelSerializer):
     paper = PaperSerializer(many=False, read_only=False)
     year = YearSerializer(many=False, read_only=False)
     session = SessionSerializer(many=False, read_only=False)
+    explanations = ExplanationListSerializer(many=True, read_only=False)
     author = AccountSerializer(required=False, many=False, read_only=False)
 
     class Meta:
@@ -69,37 +88,8 @@ class SingleQuestionSerializer(WritableNestedModelSerializer):
         fields = "__all__"
         lookup_field = 'slug'
 
-    # def update(self, instance, validated_data):
-    #     boards_data = validated_data.pop('board')
-    #     instance = super(SingleQuestionSerializer, self).update(
-    #         instance, validated_data)
-
-    #     for board_data in boards_data:
-    #         board_qs = Board.objects.filter(name__iexact=board_data['name'])
-
-    #         if board_qs.exists():
-    #             board = board_qs.first()
-    #         else:
-    #             board = Board.objects.create(**board_data)
-
-    #         instance.board.add(board)
-
-    #     return instance
-
-
-class ExplanationListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Explanation
-        fields = ('question', 'excerpt', 'author', 'published', 'status')
-
 
 class SingleExplanationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Explanation
-        fields = "__all__"
-
-
-class CommentListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
         fields = "__all__"

@@ -112,7 +112,7 @@ class ExplanationAdmin(admin.ModelAdmin):
     search_fields = ('question', 'content')
     list_filter = ('status', 'author')
     ordering = ('-published',)
-    list_display = ('__str__', 'author', 'published', 'status')
+    list_display = ('id', '__str__', 'author', 'published', 'status')
     fieldsets = (
         (None, {'fields': ('question', 'excerpt', 'content',)}),
         (None, {'fields': ('published', 'author', 'status')})

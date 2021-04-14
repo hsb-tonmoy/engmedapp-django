@@ -134,7 +134,7 @@ class Explanation(models.Model):
     updated = models.DateTimeField(
         _("Updated On"), auto_now=True, null=True, blank=True)
     author = models.ForeignKey(
-        Accounts, on_delete=models.DO_NOTHING, related_name="explanations")
+        Accounts, on_delete=models.CASCADE, related_name="explanations")
     ONSAVE_OPTIONS = (
         ('draft', 'Draft'),
         ('published', 'Published'),
@@ -162,7 +162,7 @@ class Comment(MPTTModel):
     updated = models.DateTimeField(
         _("Updated On"), auto_now=True, null=True, blank=True)
     author = models.ForeignKey(
-        Accounts, on_delete=models.DO_NOTHING, related_name="comments")
+        Accounts, on_delete=models.CASCADE, related_name="comments")
     ONSAVE_OPTIONS = (
         ('draft', 'Draft'),
         ('published', 'Published'),

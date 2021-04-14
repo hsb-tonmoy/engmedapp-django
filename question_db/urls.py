@@ -11,4 +11,6 @@ urlpatterns = [
     path('years/', YearList.as_view(), name='years_list'),
     path('sessions/', SessionList.as_view(), name='sessions_list'),
     path('question/<slug:slug>/', SingleQuestion.as_view(), name='question'),
+    # path('explanations/', ExplanationList.as_view(), name='explanations'),
+    path('explanation/<int:pk>/', SingleExplanation.as_view(), name='explanation'),
 ]

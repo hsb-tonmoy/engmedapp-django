@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django_filters import rest_framework as filters
 from django_filters.fields import CSVWidget
 from rest_framework import generics
+from rest_framework.permissions import SAFE_METHODS, BasePermission, DjangoModelPermissions, IsAuthenticatedOrReadOnly
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
 from .serializers import BoardSerializer, LevelSerializer, PaperSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationListSerializer, SingleExplanationSerializer, CommentListSerializer
 
@@ -43,8 +44,7 @@ class QuestionList(generics.ListCreateAPIView):
     queryset = Question.objects.filter(status='published')
     serializer_class = QuestionListSerializer
     filterset_class = QuestionsFilter
-    # filterset_fields = ('board__name', 'level__name',
-    #                     'paper__name', 'year__name', 'session__name')
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class SingleQuestion(generics.RetrieveUpdateDestroyAPIView):
@@ -53,12 +53,24 @@ class SingleQuestion(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'slug'
 
 
+class ExplanationPermissions(BasePermission):
+    message = "Editing explanations is restricted to the author only."
+
+    def has_object_permission(self, request, view, obj):
+
+        if request.method in SAFE_METHODS:
+            return True
+
+        return obj.author == request.user
+
+
 class ExplanationList(generics.ListCreateAPIView):
     queryset = Explanation.objects.filter(status="published")
     serializer_class = ExplanationListSerializer
 
 
-class SingleExplanation(generics.RetrieveUpdateDestroyAPIView):
+class SingleExplanation(generics.RetrieveUpdateDestroyAPIView, ExplanationPermissions):
+    permission_classes = [ExplanationPermissions]
     queryset = Explanation.objects.all()
     serializer_class = SingleExplanationSerializer
 
