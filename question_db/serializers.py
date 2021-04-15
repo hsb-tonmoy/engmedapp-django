@@ -8,7 +8,7 @@ from drf_writable_nested.serializers import WritableNestedModelSerializer
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Accounts
-        fields = ('user_name',)
+        fields = ('id', 'full_name')
 
 
 class BoardSerializer(serializers.ModelSerializer):
@@ -165,7 +165,7 @@ class SingleQuestionSerializer(WritableNestedModelSerializer):
         lookup_field = 'slug'
 
 
-class QuestionCreateSerializer(WritableNestedModelSerializer):
+class QuestionCreateSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     board = BoardSerializer(many=False, read_only=False)
     level = LevelSerializer(many=False, read_only=False)
@@ -177,7 +177,6 @@ class QuestionCreateSerializer(WritableNestedModelSerializer):
     class Meta:
         model = Question
         fields = "__all__"
-        # lookup_field = 'slug'
 
 
 class SingleExplanationSerializer(serializers.ModelSerializer):
