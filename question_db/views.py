@@ -4,7 +4,7 @@ from django_filters.fields import CSVWidget
 from rest_framework import generics
 from rest_framework.permissions import SAFE_METHODS, BasePermission, DjangoModelPermissions, IsAuthenticatedOrReadOnly
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
-from .serializers import BoardSerializer, LevelSerializer, PaperSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationListSerializer, SingleExplanationSerializer, CommentListSerializer
+from .serializers import BoardSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationListSerializer, SingleExplanationSerializer, CommentListSerializer
 
 
 class BoardList(generics.ListAPIView):
@@ -40,11 +40,16 @@ class QuestionsFilter(filters.FilterSet):
                   'paper__name', 'year__name', 'session__name')
 
 
-class QuestionList(generics.ListCreateAPIView):
+class QuestionList(generics.ListAPIView):
     queryset = Question.objects.filter(status='published')
     serializer_class = QuestionListSerializer
     filterset_class = QuestionsFilter
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class QuestionCreate(generics.CreateAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionCreateSerializer
 
 
 class SingleQuestion(generics.RetrieveUpdateDestroyAPIView):

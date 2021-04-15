@@ -12,7 +12,7 @@ class AccountsAdminConfig(UserAdmin):
     search_fields = ('email', 'user_name', 'full_name',)
     list_filter = ('account_type', 'is_active', 'is_staff')
     ordering = ('-date_joined',)
-    list_display = ('email', 'user_name', 'full_name',
+    list_display = ('id', 'email', 'user_name', 'full_name',
                     'is_active', 'is_staff', 'account_type')
     fieldsets = (
         (None, {'fields': ('email', 'user_name', 'full_name', 'date_joined')}),
