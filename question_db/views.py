@@ -4,7 +4,7 @@ from django_filters.fields import CSVWidget
 from rest_framework import generics
 from rest_framework.permissions import SAFE_METHODS, BasePermission, DjangoModelPermissions, IsAuthenticatedOrReadOnly
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
-from .serializers import BoardSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationListSerializer, SingleExplanationSerializer, CommentListSerializer
+from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationListSerializer, SingleExplanationSerializer, CommentListSerializer
 
 
 class BoardList(generics.ListAPIView):
@@ -69,15 +69,15 @@ class ExplanationPermissions(BasePermission):
         return obj.author == request.user
 
 
-class ExplanationList(generics.ListCreateAPIView):
-    queryset = Explanation.objects.filter(status="published")
-    serializer_class = ExplanationListSerializer
-
-
 class SingleExplanation(generics.RetrieveUpdateDestroyAPIView, ExplanationPermissions):
     permission_classes = [ExplanationPermissions]
     queryset = Explanation.objects.all()
     serializer_class = SingleExplanationSerializer
+
+
+class ExplanationCreate(generics.CreateAPIView):
+    queryset = Question.objects.all()
+    serializer_class = ExplanationCreateSerializer
 
 
 class CommentList(generics.ListCreateAPIView):

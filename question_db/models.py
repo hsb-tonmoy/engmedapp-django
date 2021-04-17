@@ -98,7 +98,9 @@ class Question(models.Model):
 
     title = models.CharField(_("Title"), max_length=255)
     excerpt = models.TextField(_("Excerpt"), null=True, blank=True)
-    content = models.TextField(_("Content"),)
+    content = models.TextField(_("Content"))
+    verified_explanation = models.TextField(
+        _("Verified Explanation"), blank=True, null=True)
     # auto_add_now is non-editable
     published = models.DateTimeField(_("Published On"), default=timezone.now)
     updated = models.DateTimeField(

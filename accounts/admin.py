@@ -1,9 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
-from .models import Accounts
-
-# Register your models here.
+from .models import Accounts, Profile
 
 
 class AccountsAdminConfig(UserAdmin):
@@ -16,9 +13,8 @@ class AccountsAdminConfig(UserAdmin):
                     'is_active', 'is_staff', 'account_type')
     fieldsets = (
         (None, {'fields': ('email', 'user_name', 'full_name', 'date_joined')}),
-        ('Permissions', {'fields': ('account_type', 'is_staff', 'is_active')}),
-        ('Personal', {'fields': ('date_of_birth', 'gender', 'profile_pic',
-         'name_of_institution', 'phone_no', 'email_address', 'website_url')}),
+        ('Permissions', {'fields': ('account_type',
+         'is_staff', 'is_active', 'is_blocked')}),
     )
 
     add_fieldsets = (
@@ -29,4 +25,28 @@ class AccountsAdminConfig(UserAdmin):
     )
 
 
+class ProfileAdminConfig(admin.ModelAdmin):
+    model = Profile
+
+    search_fields = ('user',)
+    list_filter = ('gender',)
+    ordering = ('user',)
+    list_display = ('id', 'user', 'date_of_birth', 'gender', 'last_login')
+    fieldsets = (
+        (None, {'fields': ('user', 'profile_pic', 'is_public',
+         'date_of_birth', 'gender', 'pronouns', 'last_login', 'user_rep')}),
+        ('Address', {'fields': ('city', 'state', 'country',)}),
+        ('Teacher', {'fields': ('name_of_institution',
+         'phone_no', 'email_address', 'website_url')}),
+    )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('user', 'is_public', 'profile_pic', 'date_of_birth', 'gender', 'pronouns', 'city', 'state', 'country', 'name_of_institution', 'phone_no', 'email_address', 'website_url')}
+         ),
+    )
+
+
 admin.site.register(Accounts, AccountsAdminConfig)
+admin.site.register(Profile, ProfileAdminConfig)

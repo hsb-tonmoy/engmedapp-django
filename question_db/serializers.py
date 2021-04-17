@@ -8,7 +8,7 @@ from drf_writable_nested.serializers import WritableNestedModelSerializer
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Accounts
-        fields = ('id', 'full_name')
+        fields = ('id', 'user_name')
 
 
 class BoardSerializer(serializers.ModelSerializer):
@@ -70,8 +70,8 @@ class QuestionListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('board', 'level', 'paper', 'year', 'session', 'title',
-                  'excerpt', 'published', 'slug', 'author')
+        fields = ('id', 'board', 'level', 'paper', 'year', 'session', 'title',
+                  'excerpt', 'published', 'slug', 'author', 'status')
 
     # def create(self, validated_data):
     #     boards = validated_data.pop('board', [])
@@ -165,18 +165,31 @@ class SingleQuestionSerializer(WritableNestedModelSerializer):
         lookup_field = 'slug'
 
 
-class QuestionCreateSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class QuestionCreateSerializer(serializers.ModelSerializer):
 
-    board = BoardSerializer(many=False, read_only=False)
-    level = LevelSerializer(many=False, read_only=False)
-    paper = PaperSerializer(many=False, read_only=False)
-    year = YearSerializer(many=False, read_only=False)
-    session = SessionSerializer(many=False, read_only=False)
-    author = AccountSerializer(required=False, many=False, read_only=False)
+    board = serializers.PrimaryKeyRelatedField(
+        queryset=Board.objects.all(), many=False)
+    level = serializers.PrimaryKeyRelatedField(
+        queryset=Level.objects.all(), many=False)
+    paper = serializers.PrimaryKeyRelatedField(
+        queryset=Paper.objects.all(), many=False)
+    year = serializers.PrimaryKeyRelatedField(
+        queryset=Year.objects.all(), many=False)
+    session = serializers.PrimaryKeyRelatedField(
+        queryset=Session.objects.all(), many=False)
+    author = serializers.PrimaryKeyRelatedField(
+        queryset=Accounts.objects.all(), many=False)
 
     class Meta:
         model = Question
-        fields = "__all__"
+        fields = ("title", "excerpt", "content", "verified_explanation", "status", "board", "level",
+                  "paper", "year", "session", "author", "slug", "published")
+
+
+class ExplanationCreateSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    class Meta:
+        model = Explanation
+        fields = ("question", "excerpt", "content", "author", "status")
 
 
 class SingleExplanationSerializer(serializers.ModelSerializer):
