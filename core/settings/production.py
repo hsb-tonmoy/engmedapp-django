@@ -9,10 +9,14 @@ ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0',
                  'localhost', 'engmedapp.herokuapp.com']
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-CORS_ALLOWED_ORIGINS = [
+# CORS_ALLOWED_ORIGINS = [
 
-    "https://lucid-visvesvaraya-8a085a.netlify.app",
-    "https://engmedapp.com",
-    "https://www.engmedapp.com",
+#     "https://lucid-visvesvaraya-8a085a.netlify.app",
+#     "https://engmedapp.com",
+#     "https://www.engmedapp.com",
+#     "http://localhost:5000/",
 
-]
+
+# ]
+
+CORS_ORIGIN_ALLOW_ALL = True
