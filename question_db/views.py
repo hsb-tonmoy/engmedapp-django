@@ -4,7 +4,7 @@ from django_filters.fields import CSVWidget
 from rest_framework import generics
 from rest_framework.permissions import SAFE_METHODS, BasePermission, DjangoModelPermissions, IsAuthenticatedOrReadOnly
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
-from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationListSerializer, SingleExplanationSerializer, CommentListSerializer
+from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, QuestionUpdateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationListSerializer, SingleExplanationSerializer, CommentListSerializer
 
 
 class BoardList(generics.ListAPIView):
@@ -55,6 +55,12 @@ class QuestionCreate(generics.CreateAPIView):
 class SingleQuestion(generics.RetrieveUpdateDestroyAPIView):
     queryset = Question.objects.all()
     serializer_class = SingleQuestionSerializer
+    lookup_field = 'slug'
+
+
+class SingleQuestionUpdate(generics.UpdateAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionUpdateSerializer
     lookup_field = 'slug'
 
 

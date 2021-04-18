@@ -1,11 +1,13 @@
 from django.urls import path
-from .views import BoardList, ExplanationCreate, LevelList, PaperList, QuestionCreate, YearList, SessionList, QuestionList, SingleQuestion, SingleExplanation, CommentList
+from .views import BoardList, ExplanationCreate, LevelList, PaperList, QuestionCreate, SingleQuestionUpdate, YearList, SessionList, QuestionList, SingleQuestion, SingleExplanation, CommentList
 
 app_name = 'queestion_db'
 
 urlpatterns = [
     path('list/', QuestionList.as_view(), name='question_list'),
     path('create/', QuestionCreate.as_view(), name='question_create'),
+    path('update/<slug:slug>/', SingleQuestionUpdate.as_view(),
+         name='question_create'),
     path('boards/', BoardList.as_view(), name='boards_list'),
     path('levels/', LevelList.as_view(), name='levels_list'),
     path('papers/', PaperList.as_view(), name='papers_list'),
