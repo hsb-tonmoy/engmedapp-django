@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django_countries.fields import CountryField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.mail import send_mail
 # Create your models here.
 
 
@@ -120,3 +121,17 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
+
+
+@receiver(post_save, sender=Accounts)
+def send_mail_on_create(sender, instance, created, **kwargs):
+
+    subject = 'Welcome to EngMedApp - Thank Your For Signing Up'
+    from_email = 'no-reply@engmedapp.com'
+    message = 'Thank Your For Signing Up'
+    recepient_list = [instance.email]
+    html_message = '<h1>Thank Your For Signing Up</h1>'
+
+    if created:
+        send_mail(subject, message, from_email, recepient_list,
+                  fail_silently=False, html_message=html_message)
