@@ -22,7 +22,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('quiz/', include('quiz.urls', namespace='quiz')),
     path('questions/', include('question_db.urls', namespace='question')),
-    path('api/account/', include('accounts.urls', namespace='account')),
+    path('accounts/', include('accounts.urls', namespace='account')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
+    path('auth/', include('djoser.social.urls')),
     path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
