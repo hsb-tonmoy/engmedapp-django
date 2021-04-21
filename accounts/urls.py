@@ -1,8 +1,9 @@
+from accounts.views import BlacklistTokenUpdateView, CustomTokenObtainPairView
 from django.urls import path
 
 app_name = 'accounts'
 
 urlpatterns = [
-    # path('user/me/', AccountRegistration.as_view(), name="registration"),
-
+    path('logout/blacklist/', BlacklistTokenUpdateView.as_view(),
+         name='blacklist')
 ]
