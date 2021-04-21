@@ -1,4 +1,4 @@
-from accounts.views import BlacklistTokenUpdateView, CustomTokenObtainPairView
+from accounts.views import BlacklistTokenUpdateView
 from django.urls import path
 
 app_name = 'accounts'
