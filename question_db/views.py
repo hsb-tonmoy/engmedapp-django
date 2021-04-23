@@ -1,35 +1,39 @@
-from django.shortcuts import render
 from django_filters import rest_framework as filters
-from django_filters.fields import CSVWidget
 from rest_framework import generics
-from rest_framework.permissions import SAFE_METHODS, BasePermission, DjangoModelPermissions, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
 from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, QuestionUpdateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationListSerializer, SingleExplanationSerializer, CommentListSerializer
+from .permissions import ExplanationPermissions
 
 
 class BoardList(generics.ListAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
 
 class LevelList(generics.ListAPIView):
     queryset = Level.objects.all()
     serializer_class = LevelSerializer
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
 
 class PaperList(generics.ListCreateAPIView):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
 
 class YearList(generics.ListCreateAPIView):
     queryset = Year.objects.all()
     serializer_class = YearSerializer
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
 
 class SessionList(generics.ListCreateAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
 
 class QuestionsFilter(filters.FilterSet):
@@ -44,12 +48,13 @@ class QuestionList(generics.ListAPIView):
     queryset = Question.objects.filter(status='published')
     serializer_class = QuestionListSerializer
     filterset_class = QuestionsFilter
-    # permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class QuestionCreate(generics.CreateAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionCreateSerializer
+    permission_classes = [DjangoModelPermissions]
 
 
 class SingleQuestion(generics.RetrieveUpdateDestroyAPIView):
@@ -64,19 +69,9 @@ class SingleQuestionUpdate(generics.UpdateAPIView):
     lookup_field = 'slug'
 
 
-class ExplanationPermissions(BasePermission):
-    message = "Editing explanations is restricted to the author only."
-
-    def has_object_permission(self, request, view, obj):
-
-        if request.method in SAFE_METHODS:
-            return True
-
-        return obj.author == request.user
-
-
-class SingleExplanation(generics.RetrieveUpdateDestroyAPIView, ExplanationPermissions):
-    permission_classes = [ExplanationPermissions]
+class SingleExplanation(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [ExplanationPermissions,
+                          DjangoModelPermissionsOrAnonReadOnly]
     queryset = Explanation.objects.all()
     serializer_class = SingleExplanationSerializer
 
@@ -84,6 +79,7 @@ class SingleExplanation(generics.RetrieveUpdateDestroyAPIView, ExplanationPermis
 class ExplanationCreate(generics.CreateAPIView):
     queryset = Question.objects.all()
     serializer_class = ExplanationCreateSerializer
+    permission_classes = [DjangoModelPermissions]
 
 
 class CommentList(generics.ListCreateAPIView):

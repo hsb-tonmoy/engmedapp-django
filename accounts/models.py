@@ -1,12 +1,11 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import Group, AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django_countries.fields import CountryField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
-# Create your models here.
 
 
 class CustomAccountManager(BaseUserManager):
@@ -76,6 +75,9 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
     def get_email(self):
         return self.email
 
+    def get_groups(self):
+        return "\n".join([p.name for p in self.groups.all()])
+
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -122,6 +124,21 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
+
+
+@receiver(post_save, sender=Accounts)
+def add_or_update_user_group(sender, instance, created, **kwargs):
+    if created:
+        if instance.account_type == 1 or instance.account_type == 2:
+            group = Group.objects.get(name="Students and Teachers")
+        elif instance.account_type == 3:
+            group = Group.objects.get(name="Content Creator")
+        elif instance.account_type == 4:
+            group = Group.objects.get(name="Manager")
+        elif instance.account_type == 5 or instance.is_superuser:
+            group = Group.objects.get(name="Admin")
+
+        instance.groups.add(group)
 
 
 @receiver(post_save, sender=Accounts)
