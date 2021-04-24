@@ -6,13 +6,13 @@ from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSeri
 from .permissions import ExplanationPermissions
 
 
-class BoardList(generics.ListAPIView):
+class BoardList(generics.ListCreateAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
 
-class LevelList(generics.ListAPIView):
+class LevelList(generics.ListCreateAPIView):
     queryset = Level.objects.all()
     serializer_class = LevelSerializer
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
