@@ -139,5 +139,5 @@ cython_debug/
 
 #Static 
 
-core/staticfiles/
+# core/staticfiles/*
 
