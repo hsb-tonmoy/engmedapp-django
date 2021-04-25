@@ -18,9 +18,9 @@ SESSION_COOKIE_SECURE = True
 #     "https://engmedapp.com",
 #     "https://www.engmedapp.com",
 #     "http://localhost:5000/",
-
-
 # ]
+
+USE_S3 = os.getenv('USE_S3') == 'TRUE'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
