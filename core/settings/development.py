@@ -134,7 +134,7 @@ USE_TZ = True
 
 # AWS S3
 
-USE_S3 = os.getenv('USE_S3') == 'TRUE'
+USE_S3 = False
 
 if USE_S3:
     # aws settings

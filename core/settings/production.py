@@ -20,7 +20,7 @@ SESSION_COOKIE_SECURE = True
 #     "http://localhost:5000/",
 # ]
 
-USE_S3 = os.getenv('USE_S3') == 'TRUE'
+USE_S3 = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
