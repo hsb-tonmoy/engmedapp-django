@@ -85,7 +85,7 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
 def upload_to_path(instance, filename):
     extension = filename.split(".")[-1].lower()
     file_id = randint(10000000, 99999999)
-    path = f'profile_pics/{file_id}_{instance.user.user_name}.jpg'
+    path = f'profiles/{file_id}_{instance.user.user_name}.jpg'
     return path
 
 
@@ -97,7 +97,7 @@ class Profile(models.Model):
     profile_pic = ProcessedImageField(upload_to=upload_to_path,
                                       processors=[ResizeToFill(80, 80)],
                                       format='JPEG',
-                                      options={'quality': 60}, null=True, blank=True)
+                                      options={'quality': 60}, default='profiles/avatar.png', null=True, blank=True,)
     date_of_birth = models.DateField(_("Date of Birth"), null=True, blank=True)
     GENDER = (
         (1, 'Male'),
@@ -118,7 +118,8 @@ class Profile(models.Model):
 
     city = models.CharField(_("City"), max_length=100, blank=True, null=True)
     state = models.CharField(_("State"), max_length=50, blank=True, null=True)
-    country = CountryField(blank_label='(Select Country)')
+    country = models.CharField(
+        _("Country"), max_length=50, blank=True, null=True)
 
     ''' Teacher's Fields Start '''
 

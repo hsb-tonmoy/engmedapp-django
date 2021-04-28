@@ -7,8 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.permissions import AllowAny
-
+from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 # class CustomTokenObtainPairView(TokenObtainPairView):
 #     serializer_class = CustomTokenObtainPairSerializer
@@ -29,6 +30,30 @@ class BlacklistTokenUpdateView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+class ProfilePermissions(BasePermission):
+    message = "Editing profile is restricted to the owner only."
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+
+        return obj.user == request.user or (request.user.account_type == 5)
+
+
 class ProfileView(RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
+    permission_classes = [
+        DjangoModelPermissionsOrAnonReadOnly, ProfilePermissions]
     serializer_class = ProfileSerializer
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+        if serializer.is_valid():
+            self.perform_update(serializer)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
