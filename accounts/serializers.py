@@ -1,5 +1,7 @@
+from accounts.models import Profile
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer
+from rest_framework import serializers
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
@@ -23,3 +25,11 @@ class UserCreateSerializer(UserCreateSerializer):
 #         token['account_type'] = user.account_type
 
 #         return token
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    profile_pic = serializers.ImageField()
+
+    class Meta:
+        model = Profile
+        fields = "__all__"

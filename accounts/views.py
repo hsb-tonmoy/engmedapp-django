@@ -1,5 +1,8 @@
 # from accounts.serializers import CustomTokenObtainPairSerializer
+from accounts.serializers import ProfileSerializer
+from accounts.models import Profile
 from rest_framework import status
+from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -24,3 +27,8 @@ class BlacklistTokenUpdateView(APIView):
         except Exception as e:
             print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileView(RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer

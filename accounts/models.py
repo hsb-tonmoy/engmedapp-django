@@ -6,6 +6,9 @@ from django_countries.fields import CountryField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
+from random import randint
 
 
 class CustomAccountManager(BaseUserManager):
@@ -79,12 +82,22 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
         return "\n".join([p.name for p in self.groups.all()])
 
 
+def upload_to_path(instance, filename):
+    extension = filename.split(".")[-1].lower()
+    file_id = randint(10000000, 99999999)
+    path = f'profile_pics/{file_id}_{instance.user.user_name}.jpg'
+    return path
+
+
 class Profile(models.Model):
     user = models.OneToOneField(
         Accounts, on_delete=models.CASCADE, related_name="profile")
     is_public = models.BooleanField(
         _("Is the profile public or private?"), default=True)
-    profile_pic = models.ImageField(null=True, blank=True)
+    profile_pic = ProcessedImageField(upload_to=upload_to_path,
+                                      processors=[ResizeToFill(80, 80)],
+                                      format='JPEG',
+                                      options={'quality': 60}, null=True, blank=True)
     date_of_birth = models.DateField(_("Date of Birth"), null=True, blank=True)
     GENDER = (
         (1, 'Male'),
