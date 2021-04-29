@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_delete
 from django.core.files.storage import default_storage
 from imagekit.models import ProcessedImageField, ImageSpecField
-from imagekit import ImageSpec, register
+from imagekit import register
 from .processors import ImageThumbSpec, ImageMedSpec, ImageLargeSpec
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
@@ -48,7 +48,17 @@ class Image(models.Model):
 def delete_images(sender, instance, **kwargs):
 
     thumb = str(instance.image_thumb)
+    med = str(instance.image_med)
+    large = str(instance.image_large)
 
     if default_storage.exists(thumb):
 
         default_storage.delete(thumb)
+
+    if default_storage.exists(med):
+
+        default_storage.delete(med)
+
+    if default_storage.exists(large):
+
+        default_storage.delete(large)
