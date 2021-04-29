@@ -8,7 +8,7 @@ from .processors import ImageThumbSpec, ImageMedSpec, ImageLargeSpec
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from random import randint
-
+from datetime import date
 
 register.generator('media_lib:imagethumb', ImageThumbSpec)
 register.generator('media_lib:imagemed', ImageMedSpec)
@@ -17,16 +17,18 @@ register.generator('media_lib:imagelarge', ImageLargeSpec)
 
 def upload_to_path(instance, filename):
     file_name = filename.split(".")[0][:30]
+    extension = filename.split(".")[-1]
     file_id = randint(10000000, 99999999)
-    path = f'images/{file_id}_{file_name}.png'
+    today = date.today()
+    upload_date = today.strftime("%d_%m_%Y").split("_")
+    path = f'images/{upload_date[2]}/{upload_date[1]}/{upload_date[0]}/{file_name}_{file_id}.{extension}'
     return path
 
 
 class Image(models.Model):
 
     image = ProcessedImageField(upload_to=upload_to_path,
-                                format='PNG',
-                                options={'quality': 60})
+                                options={'quality': 50})
     image_thumb = ImageSpecField(source='image',
                                  id='media_lib:imagethumb')
     image_med = ImageSpecField(source='image',

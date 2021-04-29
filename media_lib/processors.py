@@ -50,8 +50,9 @@ class ImageThumbSpec(ImageSpec):
     @property
     def cachefile_name(self):
         source_filename = getattr(self.source, 'name', None)
-        source_filename = source_filename.split(".")[:-1]
-        filename = "".join(source_filename) + "_thumb.png"
+        source_filename = source_filename.split(".")
+        extension = source_filename.pop(-1)
+        filename = "".join(source_filename) + "_thumb." + extension
         return filename
 
 
@@ -61,8 +62,9 @@ class ImageMedSpec(ImageSpec):
     @property
     def cachefile_name(self):
         source_filename = getattr(self.source, 'name', None)
-        source_filename = source_filename.split(".")[:-1]
-        filename = "".join(source_filename) + "_med.png"
+        source_filename = source_filename.split(".")
+        extension = source_filename.pop(-1)
+        filename = "".join(source_filename) + "_med." + extension
         return filename
 
 
@@ -72,6 +74,7 @@ class ImageLargeSpec(ImageSpec):
     @property
     def cachefile_name(self):
         source_filename = getattr(self.source, 'name', None)
-        source_filename = source_filename.split(".")[:-1]
-        filename = "".join(source_filename) + "_large.png"
+        source_filename = source_filename.split(".")
+        extension = source_filename.pop(-1)
+        filename = "".join(source_filename) + "_large." + extension
         return filename
