@@ -85,7 +85,7 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
 def upload_to_path(instance, filename):
     extension = filename.split(".")[-1].lower()
     file_id = randint(10000000, 99999999)
-    path = f'profiles/{file_id}_{instance.user.user_name}.jpg'
+    path = f'profiles/{file_id}_{instance.user.user_name}.png'
     return path
 
 
@@ -96,8 +96,8 @@ class Profile(models.Model):
         _("Is the profile public or private?"), default=True)
     profile_pic = ProcessedImageField(upload_to=upload_to_path,
                                       processors=[ResizeToFill(80, 80)],
-                                      format='JPEG',
-                                      options={'quality': 60}, default='profiles/avatar.png', null=True, blank=True,)
+                                      format='PNG',
+                                      options={'quality': 40}, default='profiles/avatar.png', null=True, blank=True)
     date_of_birth = models.DateField(_("Date of Birth"), null=True, blank=True)
     GENDER = (
         (1, 'Male'),

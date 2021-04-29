@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'accounts',
     'quiz',
-    'question_db'
+    'question_db',
+    'media_lib'
 ]
 
 MIDDLEWARE = [
@@ -238,3 +239,5 @@ DJOSER = {
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     }
 }
+
+# Media_lib Settings
