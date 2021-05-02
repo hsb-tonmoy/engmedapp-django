@@ -8,10 +8,12 @@ User = get_user_model()
 
 
 class UserCreateSerializer(UserCreateSerializer):
+    profile_pic = serializers.ImageField(source="profile.profile_pic")
+
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ('id', 'email', 'user_name',
-                  'full_name', 'password', 'account_type')
+                  'full_name', 'password', 'account_type', 'profile_pic')
 
 
 # class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
