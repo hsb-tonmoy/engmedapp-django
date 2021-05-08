@@ -2,9 +2,22 @@ from accounts.models import Profile
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
-# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 
 User = get_user_model()
+
+
+class CookieTokenRefreshSerializer(TokenRefreshSerializer):
+    refresh = None
+
+    def validate(self, attrs):
+        attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
+        if attrs['refresh']:
+            return super().validate(attrs)
+        else:
+            raise InvalidToken(
+                'No valid token found in cookie \'refresh_token\'')
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -14,19 +27,6 @@ class UserCreateSerializer(UserCreateSerializer):
         model = User
         fields = ('id', 'email', 'user_name',
                   'full_name', 'password', 'account_type', 'profile_pic')
-
-
-# class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-
-#     @classmethod
-#     def get_token(cls, user):
-#         token = super().get_token(user)
-
-#         # Add custom claims
-#         token['user'] = user.user_name
-#         token['account_type'] = user.account_type
-
-#         return token
 
 
 class ProfileSerializer(serializers.ModelSerializer):

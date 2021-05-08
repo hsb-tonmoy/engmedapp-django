@@ -239,5 +239,3 @@ DJOSER = {
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     }
 }
-
-# Media_lib Settings
