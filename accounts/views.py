@@ -17,7 +17,7 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 class CookieTokenObtainPairView(TokenObtainPairView):
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('refresh'):
-            cookie_max_age = 60 * 5  # 14 days
+            cookie_max_age = 3600 * 24 * 10  # 10 days
             response.set_cookie(
                 'refresh_token', response.data['refresh'], max_age=cookie_max_age, httponly=True)
             del response.data['refresh']
@@ -27,7 +27,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
 class CookieTokenRefreshView(TokenRefreshView):
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('refresh'):
-            cookie_max_age = 60 * 5  # 14 days
+            cookie_max_age = 3600 * 24 * 10  # 10 days
             response.set_cookie(
                 'refresh_token', response.data['refresh'], max_age=cookie_max_age, httponly=True)
             del response.data['refresh']
