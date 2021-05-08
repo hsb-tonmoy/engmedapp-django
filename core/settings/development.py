@@ -177,6 +177,11 @@ CORS_ALLOWED_ORIGINS = [
 
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_SAMESITE = None
+
 # Email Setup
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -205,8 +210,8 @@ REST_FRAMEWORK = {
 # Authentication
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=5),
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
