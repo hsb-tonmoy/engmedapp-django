@@ -39,14 +39,13 @@ class BlacklistTokenUpdateView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = ()
 
-    def finalize_response(self, request, response, *args, **kwargs):
+    def post(self, request):
         try:
-            refresh_token = response.data.get('refresh')
+            refresh_token = request.COOKIES['refresh_token']
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
-            print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 # JWT Cookie End
