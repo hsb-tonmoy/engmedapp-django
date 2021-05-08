@@ -39,7 +39,7 @@ class BlacklistTokenUpdateView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = ()
 
-    def post(self, response):
+    def finalize_response(self, request, response, *args, **kwargs):
         try:
             refresh_token = response.data.get('refresh')
             token = RefreshToken(refresh_token)
