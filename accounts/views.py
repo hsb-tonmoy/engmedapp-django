@@ -41,9 +41,11 @@ class BlacklistTokenUpdateView(APIView):
     authentication_classes = ()
 
     def delete_auth_cookies(self, response, refresh_token):
-        response.delete_cookie(
+        response.set_cookie(
             'refresh_token',
             refresh_token,
+            max_age=1,
+            httponly=True
         )
 
     def post(self, request):
