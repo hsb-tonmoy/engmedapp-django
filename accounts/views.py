@@ -40,29 +40,23 @@ class BlacklistTokenUpdateView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = ()
 
+    def delete_auth_cookies(self, response, refresh_token):
+        response.delete_cookie(
+            'refresh_token',
+            refresh_token,
+        )
+
     def post(self, request):
+        response = Response({})
         try:
             refresh_token = request.COOKIES['refresh_token']
             token = RefreshToken(refresh_token)
             token.blacklist()
-            response = Response({})
-            if api_settings.AUTH_COOKIE:
-                self.delete_auth_cookies(response)
+            self.delete_auth_cookies(response, refresh_token)
             return response
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def delete_auth_cookies(self, response):
-        response.delete_cookie(
-            api_settings.AUTH_COOKIE,
-            domain=api_settings.AUTH_COOKIE_DOMAIN,
-            path=api_settings.AUTH_COOKIE_PATH
-        )
-        response.delete_cookie(
-            '{}_refresh'.format(api_settings.AUTH_COOKIE),
-            domain=None,
-            path=reverse(self.token_refresh_view_name),
-        )
 # JWT Cookie End
 
 
