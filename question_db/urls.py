@@ -1,7 +1,11 @@
-from django.urls import path
-from .views import BoardList, ExplanationCreate, LevelList, PaperList, QuestionCreate, SingleBoard, SingleLevel, SinglePaper, SingleQuestionUpdate, SingleSession, SingleYear, YearList, SessionList, QuestionList, SingleQuestion, SingleExplanation, CommentList
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import BoardList, LevelList, PaperList, QuestionCreate, SingleBoard, SingleLevel, SinglePaper, SingleQuestionUpdate, SingleSession, SingleYear, YearList, SessionList, QuestionList, SingleQuestion, Explanation
 
 app_name = 'queestion_db'
+
+router = DefaultRouter()
+router.register(r'explanations', Explanation)
 
 urlpatterns = [
     path('list/', QuestionList.as_view(), name='question_list'),
@@ -19,6 +23,5 @@ urlpatterns = [
     path('sessions/', SessionList.as_view(), name='sessions_list'),
     path('session/<int:pk>/', SingleSession.as_view(), name='session'),
     path('question/<slug:slug>/', SingleQuestion.as_view(), name='question'),
-    path('explanation/create/', ExplanationCreate.as_view(), name='explanation'),
-    path('explanation/<int:pk>/', SingleExplanation.as_view(), name='explanation'),
+    path('', include(router.urls)),
 ]

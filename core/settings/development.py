@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'storages',
     'imagekit',
     'django_cleanup.apps.CleanupConfig',
+    'vote',
     'accounts',
     'quiz',
     'question_db',

@@ -1,8 +1,9 @@
 from django_filters import rest_framework as filters
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.permissions import DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
+from vote.views import VoteMixin
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
-from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, QuestionUpdateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationListSerializer, SingleExplanationSerializer, CommentListSerializer
+from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, QuestionUpdateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationSerializer, ExplanationCreateSerializer, CommentListSerializer
 from .permissions import ExplanationPermissions
 
 
@@ -99,22 +100,16 @@ class SingleQuestionUpdate(generics.UpdateAPIView):
     lookup_field = 'slug'
 
 
-class SingleExplanation(generics.RetrieveUpdateDestroyAPIView):
+class Explanation(viewsets.ModelViewSet, VoteMixin):
     permission_classes = [ExplanationPermissions,
                           DjangoModelPermissionsOrAnonReadOnly]
     queryset = Explanation.objects.all()
-    serializer_class = SingleExplanationSerializer
+    serializer_class = ExplanationSerializer
 
-
-class ExplanationCreate(generics.CreateAPIView):
-    queryset = Question.objects.all()
-    serializer_class = ExplanationCreateSerializer
-    permission_classes = [DjangoModelPermissions]
+    def create(self, request):
+        serializer = ExplanationCreateSerializer
 
 
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.filter(status="published")
     serializer_class = CommentListSerializer
-
-# class CommentUpdateDelete(generics.RetrieveUpdateDestroyAPIVieww):
-#     queryset = Comment.objects.all()

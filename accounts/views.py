@@ -1,12 +1,13 @@
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.settings import api_settings
 from .serializers import CookieTokenRefreshSerializer, ProfileSerializer
 from .models import Profile
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import BasePermission, SAFE_METHODS
@@ -44,10 +45,24 @@ class BlacklistTokenUpdateView(APIView):
             refresh_token = request.COOKIES['refresh_token']
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
+            response = Response({})
+            if api_settings.AUTH_COOKIE:
+                self.delete_auth_cookies(response)
+            return response
+        except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    def delete_auth_cookies(self, response):
+        response.delete_cookie(
+            api_settings.AUTH_COOKIE,
+            domain=api_settings.AUTH_COOKIE_DOMAIN,
+            path=api_settings.AUTH_COOKIE_PATH
+        )
+        response.delete_cookie(
+            '{}_refresh'.format(api_settings.AUTH_COOKIE),
+            domain=None,
+            path=reverse(self.token_refresh_view_name),
+        )
 # JWT Cookie End
 
 

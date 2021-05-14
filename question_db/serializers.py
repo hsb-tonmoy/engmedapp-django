@@ -132,13 +132,13 @@ class QuestionUpdateSerializer(serializers.ModelSerializer):
                   "paper", "year", "session", "author", "slug")
 
 
-class ExplanationCreateSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class ExplanationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Explanation
         fields = ("question", "excerpt", "content", "author", "status")
 
 
-class SingleExplanationSerializer(serializers.ModelSerializer):
+class ExplanationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Explanation
         fields = "__all__"

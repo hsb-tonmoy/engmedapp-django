@@ -5,11 +5,11 @@ app_name = 'accounts'
 
 urlpatterns = [
     path('login/', CookieTokenObtainPairView.as_view(),
-         name='token_obtain_pair'),
+         name='login'),
     path('login/refresh/',
          CookieTokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', BlacklistTokenUpdateView.as_view(),
-         name='blacklist'),
+         name='logout'),
     path('profile/<int:pk>/', ProfileView.as_view(), name='profile')
 
 ]

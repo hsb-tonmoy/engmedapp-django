@@ -1,4 +1,5 @@
 from django.db import models
+from vote.models import VoteModel
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from mptt.models import MPTTModel
@@ -120,7 +121,7 @@ class Question(models.Model):
     #     return reverse('question', kwargs={'slug': self.slug, 'id':self.id})
 
 
-class Explanation(models.Model):
+class Explanation(VoteModel, models.Model):
 
     class Meta:
 
