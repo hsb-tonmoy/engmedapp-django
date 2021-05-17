@@ -149,6 +149,8 @@ def add_or_update_user_group(sender, instance, created, **kwargs):
         elif instance.account_type == 4:
             group = Group.objects.get(name="Manager")
         elif instance.account_type == 5 or instance.is_superuser:
+            if not Group.objects.filter(name="Admin").exists():
+                Group.objects.create(name="Admin")
             group = Group.objects.get(name="Admin")
 
         instance.groups.add(group)
