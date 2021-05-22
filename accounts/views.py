@@ -11,14 +11,14 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-
+from django.conf import settings
 # JWT Cookie Start
 
 
 class CookieTokenObtainPairView(TokenObtainPairView):
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('refresh'):
-            cookie_max_age = 3600 * 24 * 10  # 10 days
+            cookie_max_age = settings.COOKIE_AGE  # 10 days
             response.set_cookie(
                 'refresh_token', response.data['refresh'], max_age=cookie_max_age, httponly=True)
             del response.data['refresh']
@@ -28,7 +28,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
 class CookieTokenRefreshView(TokenRefreshView):
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('refresh'):
-            cookie_max_age = 3600 * 24 * 10  # 10 days
+            cookie_max_age = settings.COOKIE_AGE  # 10 days
             response.set_cookie(
                 'refresh_token', response.data['refresh'], max_age=cookie_max_age, httponly=True)
             del response.data['refresh']
@@ -58,6 +58,7 @@ class BlacklistTokenUpdateView(APIView):
             return response
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 # JWT Cookie End
 
