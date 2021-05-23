@@ -174,15 +174,6 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 AUTH_USER_MODEL = 'accounts.Accounts'
 
-# CORS
-
-CORS_ALLOWED_ORIGINS = [
-
-    "http://localhost:3000",
-    "http://localhost:5000",
-
-]
-
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SAMESITE = "Lax"
