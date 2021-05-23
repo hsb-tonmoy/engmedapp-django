@@ -12,13 +12,12 @@ from random import randint
 
 class CustomAccountManager(BaseUserManager):
 
-    def create_superuser(self, email, user_name, password, **other_fields):
+    def create_superuser(self, email, password, **other_fields):
 
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
         other_fields.setdefault('is_active', True)
         other_fields.setdefault('is_blocked', False)
-        other_fields.setdefault('user_name', user_name)
         other_fields.setdefault('account_type', 5)
 
         if other_fields.get('is_staff') is not True:
