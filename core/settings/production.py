@@ -11,17 +11,14 @@ ALLOWED_HOSTS = ['api.engmedapp.com', '127.0.0.1', '0.0.0.0',
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ALLOWED_ORIGINS = [
-
-#     "https://lucid-visvesvaraya-8a085a.netlify.app",
-#     "https://engmedapp.com",
-#     "https://www.engmedapp.com",
-#     "http://localhost:5000/",
-# ]
-
+CORS_ALLOWED_ORIGINS = [
+    "https://engmedapp.com",
+    "https://www.engmedapp.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
+]
 USE_S3 = True
 
 REST_SOCIAL_OAUTH_ABSOLUTE_REDIRECT_URI = 'https://engmedapp.com/auth/social/google'
