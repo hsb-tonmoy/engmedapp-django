@@ -3,7 +3,8 @@ from .models import Profile
 
 def activate_user(backend, user, response, is_new=False, *args, **kwargs):
     if is_new:
-        user.update(is_active=True)
+        user.is_active = True
+        user.save()
 
 
 def save_profile_pic(backend, user, response, is_new=False, *args, **kwargs):
