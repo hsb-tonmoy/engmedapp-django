@@ -7,13 +7,13 @@ from .models import Accounts, Profile
 class AccountsAdminConfig(UserAdmin):
     model = Accounts
 
-    search_fields = ('email', 'user_name', 'first_name', 'last_name',)
+    search_fields = ('email', 'username', 'first_name', 'last_name',)
     list_filter = ('account_type', 'is_active', 'is_staff')
     ordering = ('-date_joined',)
-    list_display = ('id', 'email', 'user_name', 'first_name', 'last_name',
+    list_display = ('id', 'email', 'username', 'first_name', 'last_name',
                     'is_active', 'is_staff', 'account_type', 'get_groups')
     fieldsets = (
-        (None, {'fields': ('email', 'user_name',
+        (None, {'fields': ('email', 'username',
          'first_name', 'last_name', 'date_joined')}),
         ('Permissions', {'fields': ('account_type',
          'is_staff', 'is_active', 'is_blocked', 'groups', 'user_permissions')}),
@@ -22,7 +22,7 @@ class AccountsAdminConfig(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'user_name', 'first_name', 'last_name', 'password1', 'password2', 'account_type', 'is_active', 'is_staff')}
+            'fields': ('email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'account_type', 'is_active', 'is_staff')}
          ),
     )
 

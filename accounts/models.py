@@ -48,7 +48,7 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _("Accounts")
 
     email = models.EmailField(_('Email Address'), unique=True)
-    user_name = models.CharField(
+    username = models.CharField(
         _('Username'), max_length=50, blank=True, null=True, unique=True)
     first_name = models.CharField(_('First Name'), max_length=255, blank=True)
     last_name = models.CharField(_('Last Name'), max_length=255, blank=True)
@@ -84,7 +84,7 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
 def upload_to_path(instance, filename):
     extension = filename.split(".")[-1].lower()
     file_id = randint(10000000, 99999999)
-    path = f'profiles/{file_id}_{instance.user.user_name}.png'
+    path = f'profiles/{file_id}_{instance.user.username}.png'
     return path
 
 
