@@ -8,7 +8,7 @@ from drf_writable_nested.serializers import WritableNestedModelSerializer
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Accounts
-        fields = ('id', 'user_name')
+        fields = ('id', 'username')
 
 
 class BoardSerializer(serializers.ModelSerializer):
@@ -55,7 +55,7 @@ class ExplanationListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Explanation
-        fields = ('question', 'excerpt', 'author',
+        fields = ('question', 'excerpt', 'author', 'content',
                   'published', 'status', 'comments')
 
 
