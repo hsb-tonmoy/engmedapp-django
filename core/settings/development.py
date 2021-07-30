@@ -273,4 +273,4 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv(
     'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
                                    'https://www.googleapis.com/auth/userinfo.profile', 'openid']
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+SOCIAL_AUTH_GOOGLE_OAUTH2_USER_FIELDS = ['firstname', 'lastname']
