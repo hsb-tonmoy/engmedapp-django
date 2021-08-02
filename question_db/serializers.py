@@ -77,7 +77,7 @@ class QuestionListSerializer(TaggitSerializer, serializers.ModelSerializer):
                   'excerpt', 'tags', 'published', 'slug', 'author', 'status')
 
 
-class SingleQuestionSerializer(WritableNestedModelSerializer):
+class SingleQuestionSerializer(TaggitSerializer, WritableNestedModelSerializer):
 
     board = BoardSerializer(many=False, read_only=False)
     level = LevelSerializer(many=False, read_only=False)
@@ -86,6 +86,7 @@ class SingleQuestionSerializer(WritableNestedModelSerializer):
     session = SessionSerializer(many=False, read_only=False)
     explanations = ExplanationListSerializer(many=True, read_only=False)
     author = AccountSerializer(required=False, many=False, read_only=False)
+    tags = TagListSerializerField()
 
     class Meta:
         model = Question
