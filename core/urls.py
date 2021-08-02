@@ -24,7 +24,9 @@ urlpatterns = [
     path('questions/', include('question_db.urls', namespace='question')),
     path('accounts/', include('accounts.urls', namespace='account')),
     path('media_lib/', include('media_lib.urls', namespace='media_lib')),
-    re_path(r'^auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
+    path('auth/', include('djoser.social.urls')),
     path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
