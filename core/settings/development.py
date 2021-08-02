@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'imagekit',
     'django_cleanup.apps.CleanupConfig',
     'vote',
+    'taggit',
+    'taggit_serializer',
     'accounts',
     'quiz',
     'question_db',
@@ -236,14 +238,14 @@ COOKIE_AGE = 3600 * 24 * 10
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
-    'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
+    'USERNAME_CHANGED_EMAIL_CONFIRMATION': False,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'SEND_CONFIRMATION_EMAIL': True,
-    'SET_USERNAME_RETYPE': True,
+    'SET_USERNAME_RETYPE': False,
     'SET_PASSWORD_RETYPE': True,
-    'PASSWORD_RESET_CONFIRM_URL': 'auth/password/rest/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'auth/activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'https://engmedapp.com/auth/password/rest/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'https://engmedapp.com/email/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'https://engmedapp.com/auth/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.UserCreateSerializer',
@@ -273,3 +275,5 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv(
     'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
                                    'https://www.googleapis.com/auth/userinfo.profile', 'openid']
+
+TAGGIT_CASE_INSENSITIVE = True

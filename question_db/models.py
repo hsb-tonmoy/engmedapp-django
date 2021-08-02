@@ -6,6 +6,7 @@ from mptt.models import MPTTModel
 from mptt.fields import TreeForeignKey
 from autoslug import AutoSlugField
 from accounts.models import Accounts
+from taggit.managers import TaggableManager
 
 
 class Board(models.Model):
@@ -91,6 +92,8 @@ class Question(models.Model):
                              related_name="questions", verbose_name=_("Year"))
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING,
                                 related_name="questions", verbose_name=_("Session"))
+
+    tags = TaggableManager()
 
     ONSAVE_OPTIONS = (
         ('draft', 'Draft'),

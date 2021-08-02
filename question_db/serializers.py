@@ -3,6 +3,8 @@ from accounts.models import Accounts
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
 
 from drf_writable_nested.serializers import WritableNestedModelSerializer
+from taggit_serializer.serializers import (TagListSerializerField,
+                                           TaggitSerializer)
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -59,7 +61,7 @@ class ExplanationListSerializer(serializers.ModelSerializer):
                   'published', 'status', 'comments')
 
 
-class QuestionListSerializer(serializers.ModelSerializer):
+class QuestionListSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     board = BoardSerializer(many=False, read_only=False)
     level = LevelSerializer(many=False, read_only=False)
@@ -67,11 +69,12 @@ class QuestionListSerializer(serializers.ModelSerializer):
     year = YearSerializer(many=False, read_only=False)
     session = SessionSerializer(many=False, read_only=False)
     author = AccountSerializer(many=False, read_only=False)
+    tags = TagListSerializerField()
 
     class Meta:
         model = Question
         fields = ('id', 'board', 'level', 'paper', 'year', 'session', 'title',
-                  'excerpt', 'published', 'slug', 'author', 'status')
+                  'excerpt', 'tags', 'published', 'slug', 'author', 'status')
 
 
 class SingleQuestionSerializer(WritableNestedModelSerializer):
