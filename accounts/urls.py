@@ -1,8 +1,4 @@
 from accounts.views import (
-    CookieTokenRefreshView,
-    CookieTokenObtainPairView,
-    SocialJWTPairOnlyAuthView,
-    AuthorizationURL,
     BlacklistTokenUpdateView,
     ProfileView
 )
