@@ -95,14 +95,14 @@ class QuestionAdmin(admin.ModelAdmin):
                     'level', 'paper', 'year', 'session', 'status')
     fieldsets = (
         (None, {'fields': ('title', 'board', 'level', 'paper',
-         'year', 'session', 'excerpt', 'content', 'verified_explanation', 'status')}),
+         'year', 'session', 'excerpt', 'content', 'verified_explanation', 'tags', 'status')}),
         (None, {'fields': ('published', 'author')})
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('title', 'board', 'level', 'paper', 'year', 'session', 'excerpt', 'content', 'verified_explanation', 'status', 'author', 'published')}
+            'fields': ('title', 'board', 'level', 'paper', 'year', 'session', 'excerpt', 'content', 'verified_explanation', 'tags' 'status', 'author', 'published')}
          ),
     )
 
