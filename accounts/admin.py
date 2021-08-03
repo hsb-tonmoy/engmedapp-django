@@ -11,18 +11,18 @@ class AccountsAdminConfig(UserAdmin):
     list_filter = ('account_type', 'is_active', 'is_staff')
     ordering = ('-date_joined',)
     list_display = ('id', 'email', 'username', 'first_name', 'last_name',
-                    'is_active', 'is_staff', 'account_type', 'get_groups')
+                    'is_active', 'is_staff', 'is_verified', 'account_type', 'get_groups')
     fieldsets = (
         (None, {'fields': ('email', 'username',
          'first_name', 'last_name', 'date_joined')}),
         ('Permissions', {'fields': ('account_type',
-         'is_staff', 'is_active', 'is_blocked', 'groups', 'user_permissions')}),
+         'is_staff', 'is_active', 'is_blocked', 'is_verified', 'groups', 'user_permissions')}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'account_type', 'is_active', 'is_staff')}
+            'fields': ('email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'account_type', 'is_active', 'is_verified', 'is_staff')}
          ),
     )
 
