@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import Accounts
+from .models import Accounts
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
 
 from drf_writable_nested.serializers import WritableNestedModelSerializer
@@ -8,9 +8,12 @@ from taggit_serializer.serializers import (TagListSerializerField,
 
 
 class AccountSerializer(serializers.ModelSerializer):
+    profile_pic = serializers.ImageField(source="profile.profile_pic")
+
     class Meta:
         model = Accounts
-        fields = ('id', 'username')
+        fields = ('id', 'email', 'username',
+                  'first_name', 'last_name', 'account_type', 'profile_pic')
 
 
 class BoardSerializer(serializers.ModelSerializer):
