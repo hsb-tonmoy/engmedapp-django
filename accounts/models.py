@@ -55,6 +55,8 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_("Join Date"), default=timezone.now)
     is_staff = models.BooleanField(_("Is the User a Staff?"), default=False)
     is_active = models.BooleanField(_("Is the User Active?"), default=False)
+    is_verified = models.BooleanField(
+        _("Is the Teacher Verified?"), default=False)
     is_blocked = models.BooleanField(_("Is the User Blocked?"), default=False)
     USER_TYPE_CHOICES = (
         (1, 'Student'),

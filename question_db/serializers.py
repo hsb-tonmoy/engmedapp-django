@@ -13,7 +13,7 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Accounts
         fields = ('id', 'email', 'username',
-                  'first_name', 'last_name', 'account_type', 'profile_pic')
+                  'first_name', 'last_name', 'account_type', 'is_verified', 'profile_pic')
 
 
 class BoardSerializer(serializers.ModelSerializer):
