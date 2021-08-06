@@ -234,6 +234,8 @@ SIMPLE_JWT = {
 
 COOKIE_AGE = 3600 * 24 * 10
 
+DOMAIN = "engmedapp.com"  # example.com
+SITE_NAME = "EngMed App"
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
@@ -243,9 +245,9 @@ DJOSER = {
     'SEND_CONFIRMATION_EMAIL': True,
     'SET_USERNAME_RETYPE': False,
     'SET_PASSWORD_RETYPE': True,
-    'PASSWORD_RESET_CONFIRM_URL': 'https://engmedapp.com/auth/password/rest/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'https://engmedapp.com/email/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'https://engmedapp.com/auth/activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'auth/password/reset/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'auth/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.UserCreateSerializer',
