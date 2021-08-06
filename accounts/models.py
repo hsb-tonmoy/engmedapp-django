@@ -12,7 +12,7 @@ from random import randint
 
 class CustomAccountManager(BaseUserManager):
 
-    def create_superuser(self, email, first_name, password, **other_fields):
+    def create_superuser(self, email, first_name, last_name, password, **other_fields):
 
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
@@ -29,13 +29,14 @@ class CustomAccountManager(BaseUserManager):
 
         return self.create_user(email, first_name, password, **other_fields)
 
-    def create_user(self, email, first_name='', password=None, **other_fields):
+    def create_user(self, email, first_name='', last_name='', password=None, **other_fields):
 
         if not email:
             raise ValueError(_('You must provide an email address'))
 
         email = self.normalize_email(email)
-        user = self.model(email=email, first_name=first_name, **other_fields)
+        user = self.model(email=email, first_name=first_name,
+                          last_name=last_name, **other_fields)
         user.set_password(password)
         user.save()
         return user
