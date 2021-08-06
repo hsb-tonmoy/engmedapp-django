@@ -38,15 +38,16 @@ class UserCreateSerializer(UserCreateSerializer):
                   'first_name', 'last_name', 'password', 'account_type', 'is_verified', 'profile_pic')
 
 
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
+
+
 class ProfileSerializer(serializers.ModelSerializer):
+    user = AccountSerializer(required=False, many=False, read_only=False)
     profile_pic = serializers.ImageField(required=False)
 
     class Meta:
         model = Profile
-        fields = "__all__"
-
-
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
         fields = "__all__"
