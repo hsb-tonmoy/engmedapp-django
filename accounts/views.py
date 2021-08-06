@@ -1,17 +1,15 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
-from .serializers import ProfileSerializer
-from .models import Profile
+from .serializers import AccountSerializer, ProfileSerializer
+from .models import Accounts, Profile
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
-from rest_framework.permissions import BasePermission, SAFE_METHODS
-from django.conf import settings
-
+from rest_framework.permissions import SAFE_METHODS
+from djoser.permissions import CurrentUserOrAdmin
 # JWT Cookie Start
 
 
@@ -63,3 +61,9 @@ class ProfileView(RetrieveUpdateAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AccountView(RetrieveUpdateAPIView):
+    queryset = Accounts.objects.all()
+    permission_classes = [CurrentUserOrAdmin]
+    serializer_class = AccountSerializer

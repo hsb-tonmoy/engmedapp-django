@@ -44,3 +44,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = "__all__"
+
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
