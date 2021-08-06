@@ -7,7 +7,7 @@ from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticated
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from django.conf import settings
@@ -33,14 +33,17 @@ class BlacklistTokenUpdateView(APIView):
 # JWT Cookie End
 
 
-class ProfilePermissions(BasePermission):
+class ProfilePermissions(IsAuthenticated):
     message = "Editing profile is restricted to the owner only."
 
     def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
+
+        user = request.user
+
+        if type(obj) == type(user) and obj == user:
             return True
 
-        return obj.user == request.user or (request.user.account_type == 5)
+        return request.method in SAFE_METHODS or user.is_staff
 
 
 class ProfileView(RetrieveUpdateAPIView):
