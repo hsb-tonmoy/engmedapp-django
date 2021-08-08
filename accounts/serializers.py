@@ -1,6 +1,6 @@
 from accounts.models import Profile
 from django.contrib.auth import get_user_model
-from djoser.serializers import UserCreateSerializer
+from djoser.serializers import UserSerializer, UserCreateSerializer
 from rest_framework import serializers, status
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
@@ -36,6 +36,15 @@ class UserCreateSerializer(UserCreateSerializer):
         model = User
         fields = ('id', 'email', 'username',
                   'first_name', 'last_name', 'password', 'account_type', 'is_verified', 'profile_pic')
+
+
+class UserSerializer(UserSerializer):
+    profile_pic = serializers.ImageField(source="profile.profile_pic")
+
+    class Meta(UserCreateSerializer.Meta):
+        model = User
+        fields = ('id', 'email', 'username',
+                  'first_name', 'last_name', 'account_type', 'is_verified', 'profile_pic')
 
 
 class AccountSerializer(serializers.ModelSerializer):
