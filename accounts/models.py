@@ -99,7 +99,7 @@ class Profile(models.Model):
     is_public = models.BooleanField(
         _("Is the profile public or private?"), default=True)
     profile_pic = ProcessedImageField(upload_to=upload_to_path,
-                                      processors=[ResizeToFill(270, 260)],
+                                      processors=[ResizeToFill(270, 270)],
                                       format='PNG',
                                       options={'quality': 60}, default='profiles/avatar.png', null=True, blank=True)
     date_of_birth = models.DateField(_("Date of Birth"), null=True, blank=True)

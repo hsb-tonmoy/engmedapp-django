@@ -232,9 +232,8 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
-COOKIE_AGE = 3600 * 24 * 10
 
-DOMAIN = "engmedapp.com"  # example.com
+DOMAIN = "engmedapp.com"
 SITE_NAME = "EngMed App"
 
 DJOSER = {
