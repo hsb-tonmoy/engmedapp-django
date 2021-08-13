@@ -35,7 +35,7 @@ class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ('id', 'email', 'username',
-                  'first_name', 'last_name', 'password', 'account_type', 'is_verified', 'profile_pic')
+                  'first_name', 'last_name', 'password', 'account_type', 'is_verified', 'profile', 'profile_pic')
 
 
 class UserSerializer(UserSerializer):
@@ -44,7 +44,7 @@ class UserSerializer(UserSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ('id', 'email', 'username',
-                  'first_name', 'last_name', 'account_type', 'is_verified', 'profile_pic')
+                  'first_name', 'last_name', 'account_type', 'is_verified', 'profile', 'profile_pic')
 
 
 class AccountSerializer(serializers.ModelSerializer):
