@@ -8,6 +8,7 @@ from mptt.fields import TreeForeignKey
 from autoslug import AutoSlugField
 from accounts.models import Accounts
 from taggit.managers import TaggableManager
+from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 
 
 class Board(models.Model):
@@ -80,6 +81,13 @@ class Session(models.Model):
         return self.name
 
 
+class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
+
+    class Meta:
+        verbose_name = _("Tag")
+        verbose_name_plural = _("Tags")
+
+
 class Question(models.Model):
 
     class Meta:
@@ -101,7 +109,7 @@ class Question(models.Model):
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING,
                                 related_name="questions", verbose_name=_("Session"))
 
-    tags = TaggableManager()
+    tags = TaggableManager(through=UUIDTaggedItem)
 
     ONSAVE_OPTIONS = (
         ('draft', 'Draft'),
