@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -48,6 +49,8 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
         verbose_name = _("Account")
         verbose_name_plural = _("Accounts")
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     email = models.EmailField(_('Email Address'), unique=True)
     username = models.CharField(
         _('Username'), max_length=50, blank=True, null=True, unique=True)
@@ -94,6 +97,7 @@ def upload_to_path(instance, filename):
 
 
 class Profile(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(
         Accounts, on_delete=models.CASCADE, related_name="profile")
     is_public = models.BooleanField(

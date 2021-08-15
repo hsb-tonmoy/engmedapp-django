@@ -7,64 +7,34 @@ from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSeri
 from .permissions import ExplanationPermissions
 
 
-class BoardList(generics.ListCreateAPIView):
+class Board(viewsets.ModelViewSet):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+
+
+class Level(viewsets.ModelViewSet):
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-
-class SingleBoard(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardSerializer
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-
-class LevelList(generics.ListCreateAPIView):
     queryset = Level.objects.all()
     serializer_class = LevelSerializer
+
+
+class Paper(viewsets.ModelViewSet):
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-
-class SingleLevel(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Level.objects.all()
-    serializer_class = LevelSerializer
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-
-class PaperList(generics.ListCreateAPIView):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
+
+
+class Year(viewsets.ModelViewSet):
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-
-class SinglePaper(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Paper.objects.all()
-    serializer_class = PaperSerializer
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-
-class YearList(generics.ListCreateAPIView):
     queryset = Year.objects.all()
     serializer_class = YearSerializer
+
+
+class Session(viewsets.ModelViewSet):
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-
-class SingleYear(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Year.objects.all()
-    serializer_class = YearSerializer
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-
-class SessionList(generics.ListCreateAPIView):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-
-class SingleSession(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Session.objects.all()
-    serializer_class = SessionSerializer
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
 
 class QuestionsFilter(filters.FilterSet):
