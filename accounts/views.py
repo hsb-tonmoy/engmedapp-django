@@ -2,14 +2,15 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
 from .serializers import AccountSerializer, ProfileSerializer
 from .models import Accounts, Profile
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import SAFE_METHODS
 from djoser.permissions import CurrentUserOrAdmin
+
 # JWT Cookie Start
 
 
@@ -27,7 +28,6 @@ class BlacklistTokenUpdateView(APIView):
             print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
 # JWT Cookie End
 
 
@@ -44,12 +44,13 @@ class ProfilePermissions(IsAuthenticatedOrReadOnly):
         return request.method in SAFE_METHODS or user.is_staff
 
 
-class ProfileView(RetrieveUpdateAPIView):
+class ProfileView(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     permission_classes = [
-        DjangoModelPermissionsOrAnonReadOnly, ProfilePermissions]
+        IsAuthenticated, ProfilePermissions]
     serializer_class = ProfileSerializer
     parser_classes = [MultiPartParser, FormParser, JSONParser]
+    lookup_field = "user__username"
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

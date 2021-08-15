@@ -3,14 +3,19 @@ from accounts.views import (
     BlacklistTokenUpdateView,
     ProfileView
 )
-from django.urls import path, re_path
+
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 app_name = 'accounts'
+
+router = DefaultRouter()
+router.register(r'profile', ProfileView)
 
 urlpatterns = [
     path('logout/', BlacklistTokenUpdateView.as_view(),
          name='logout'),
-    path('profile/<int:pk>/', ProfileView.as_view(), name='profile'),
-    path('account/<int:pk>/', AccountView.as_view(), name='account'),
+    path('account/<str:pk>/', AccountView.as_view(), name='account'),
+    path('', include(router.urls)),
 
 ]
