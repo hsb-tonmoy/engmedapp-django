@@ -1,7 +1,7 @@
-from django_filters import rest_framework as filters
 from rest_framework import generics, viewsets
 from rest_framework.permissions import DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
 from vote.views import VoteMixin
+from django_filters import rest_framework as filters
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
 from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, QuestionUpdateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationSerializer, ExplanationCreateSerializer, CommentListSerializer
 from .permissions import ExplanationPermissions
@@ -37,18 +37,18 @@ class Session(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
 
 
-class QuestionsFilter(filters.FilterSet):
-
-    class Meta:
-        model = Question
-        fields = ('board__name', 'level__name',
-                  'paper__name', 'year__name', 'session__name')
-
-
 class QuestionList(generics.ListAPIView):
     queryset = Question.objects.filter(status='published')
     serializer_class = QuestionListSerializer
-    filterset_class = QuestionsFilter
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = {
+        'board__name': ["in", "exact"],
+        'level__name': ["in", "exact"],
+        'paper__name': ["in", "exact"],
+        'year__name': ["in", "exact"],
+        'session__name': ["in", "exact"],
+        'author__username': ["in", "exact"],
+    }
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
