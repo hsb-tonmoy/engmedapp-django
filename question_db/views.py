@@ -1,4 +1,5 @@
 from rest_framework import generics, viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
 from vote.views import VoteMixin
 from django_filters import rest_framework as filters
@@ -37,9 +38,19 @@ class Session(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
 
 
+class QuestionPagination(PageNumberPagination):
+    page_size = 1
+
+    def get_paginated_response(self, data):
+        response = super(QuestionPagination, self).get_paginated_response(data)
+        response.data['total_pages'] = self.page.paginator.num_pages
+        return response
+
+
 class QuestionList(generics.ListAPIView):
     queryset = Question.objects.filter(status='published')
     serializer_class = QuestionListSerializer
+    pagination_class = QuestionPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = {
         'board__name': ["in", "exact"],
