@@ -39,7 +39,7 @@ class Session(viewsets.ModelViewSet):
 
 
 class QuestionPagination(PageNumberPagination):
-    page_size = 1
+    page_size = 10
 
     def get_paginated_response(self, data):
         response = super(QuestionPagination, self).get_paginated_response(data)
