@@ -31,12 +31,12 @@ class Command(BaseCommand):
         contSuccess = 0
 
         with open(CSV_PATH, newline='') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=';', quotechar=';')
+            spamreader = csv.reader(csvfile, delimiter=';', quotechar='"')
             next(spamreader, None)
             print('Loading...')
             for row in spamreader:
-                question = Question.objects.create(board=Board.objects.get(name=row[0]), level=Level.objects.get(name=row[1]), paper=Paper.objects.get_or_create(name=str(row[2])), year=Year.objects.get_or_create(name=row[3]), session=Session.objects.get_or_create(name=row[4]), title=row[5],
-                                                   excerpt=row[6], content=row[7], verified_explanation=row[8], author=Accounts.objects.get(username="SirDarknight"))
+                question = Question.objects.create(board=Board.objects.get(name=row[0]), level=Level.objects.get(name=row[1]), paper=Paper.objects.get(name=str(row[2])), year=Year.objects.get(name=str(row[3])), session=Session.objects.get(name=str(row[4])), title=str(row[5]),
+                                                   excerpt=str(row[6]), content=str(row[7]), verified_explanation=str(row[8]), author=Accounts.objects.get(username="SirDarknight"))
                 tags = row[9].split(",")
                 for tag in tags:
                     question.tags.add(tag)
