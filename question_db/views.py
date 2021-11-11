@@ -1,4 +1,5 @@
 from rest_framework import generics, viewsets
+from rest_framework import filters as f
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
 from vote.views import VoteMixin
@@ -51,7 +52,7 @@ class QuestionList(generics.ListAPIView):
     queryset = Question.objects.filter(status='published')
     serializer_class = QuestionListSerializer
     pagination_class = QuestionPagination
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (filters.DjangoFilterBackend, f.OrderingFilter,)
     filter_fields = {
         'board__name': ["in", "exact"],
         'level__name': ["in", "exact"],
