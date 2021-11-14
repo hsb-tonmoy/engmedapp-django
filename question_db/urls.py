@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import Board, Level, Paper, Session, Year, QuestionCreate, SingleQuestionUpdate, QuestionList, SingleQuestion, Explanation
+from .views import Board, Level, Paper, Session, TagView, Year, QuestionCreate, SingleQuestionUpdate, QuestionList, SingleQuestion, Explanation
 
 app_name = 'question_db'
 
@@ -18,5 +18,6 @@ urlpatterns = [
     path('update/<slug:slug>/', SingleQuestionUpdate.as_view(),
          name='question_create'),
     path('question/<slug:slug>/', SingleQuestion.as_view(), name='question'),
+    path('tags/', TagView.as_view(), name='tags_list'),
     path('', include(router.urls)),
 ]

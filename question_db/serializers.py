@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Accounts
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
-
+from taggit.models import Tag
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
@@ -77,7 +77,7 @@ class QuestionListSerializer(TaggitSerializer, serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'board', 'level', 'paper', 'year', 'session', 'title',
-                  'excerpt', 'tags', 'published', 'slug', 'author', 'status')
+                  'excerpt', 'tags', 'published', 'slug', 'author', 'published', 'status')
 
 
 class SingleQuestionSerializer(TaggitSerializer, WritableNestedModelSerializer):
@@ -148,4 +148,11 @@ class ExplanationCreateSerializer(serializers.ModelSerializer):
 class ExplanationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Explanation
+        fields = "__all__"
+
+
+class TagSerializer(TaggitSerializer, serializers.ModelSerializer):
+
+    class Meta:
+        model = Tag
         fields = "__all__"

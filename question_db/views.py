@@ -4,8 +4,9 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
 from vote.views import VoteMixin
 from django_filters import rest_framework as filters
+from taggit.models import Tag
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
-from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, QuestionUpdateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationSerializer, ExplanationCreateSerializer, CommentListSerializer
+from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, QuestionUpdateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationSerializer, ExplanationCreateSerializer, CommentListSerializer, TagSerializer
 from .permissions import ExplanationPermissions
 
 
@@ -59,6 +60,7 @@ class QuestionList(generics.ListAPIView):
         'paper__name': ["in", "exact"],
         'year__name': ["in", "exact"],
         'session__name': ["in", "exact"],
+        'tags__name': ["in", "exact"],
         'author__username': ["in", "exact"],
     }
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -95,3 +97,10 @@ class Explanation(viewsets.ModelViewSet, VoteMixin):
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.filter(status="published")
     serializer_class = CommentListSerializer
+
+
+class TagView(generics.ListAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    filter_backends = (f.SearchFilter,)
+    search_fields = ('name',)
