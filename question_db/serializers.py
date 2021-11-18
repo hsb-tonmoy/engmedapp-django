@@ -9,11 +9,15 @@ from taggit_serializer.serializers import (TagListSerializerField,
 
 class AccountSerializer(serializers.ModelSerializer):
     profile_pic = serializers.ImageField(source="profile.profile_pic")
+    city = serializers.CharField(source="profile.city")
+    country = serializers.CharField(source="profile.country")
+    phone_no = serializers.CharField(source="profile.phone_no")
+    email = serializers.CharField(source="profile.email")
 
     class Meta:
         model = Accounts
         fields = ('id', 'email', 'username',
-                  'first_name', 'last_name', 'account_type', 'is_verified', 'profile_pic')
+                  'first_name', 'last_name', 'account_type', 'is_verified', 'profile_pic', 'city', 'country')
 
 
 class BoardSerializer(serializers.ModelSerializer):
