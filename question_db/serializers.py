@@ -12,11 +12,13 @@ class AccountSerializer(serializers.ModelSerializer):
     city = serializers.CharField(source="profile.city")
     country = serializers.CharField(source="profile.country")
     phone_no = serializers.CharField(source="profile.phone_no")
+    name_of_institution = serializers.CharField(
+        source="profile.name_of_institution")
 
     class Meta:
         model = Accounts
         fields = ('id', 'email', 'username',
-                  'first_name', 'last_name', 'account_type', 'is_verified', 'profile_pic', 'city', 'country', 'phone_no')
+                  'first_name', 'last_name', 'account_type', 'is_verified', 'profile_pic', 'name_of_institution', 'city', 'country', 'phone_no')
 
 
 class BoardSerializer(serializers.ModelSerializer):
