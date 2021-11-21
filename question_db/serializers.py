@@ -145,9 +145,17 @@ class QuestionUpdateSerializer(serializers.ModelSerializer):
 
 
 class ExplanationCreateSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Explanation
-        fields = ("question", "excerpt", "content", "author", "status")
+        fields = ("question", "content", "author")
+
+    def save(self, **kwargs):
+
+        kwargs["author"] = self.fields["author"].get_default()
+        return super().save(**kwargs)
 
 
 class ExplanationSerializer(serializers.ModelSerializer):

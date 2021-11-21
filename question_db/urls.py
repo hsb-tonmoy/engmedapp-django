@@ -1,11 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import Board, Level, Paper, Session, TagView, Year, QuestionCreate, SingleQuestionUpdate, QuestionList, SingleQuestion, Explanation
+from .views import Board, Level, Paper, Session, TagView, Year, QuestionCreate, SingleQuestionUpdate, QuestionList, SingleQuestion, ExplanationView
 
 app_name = 'question_db'
 
 router = DefaultRouter()
-router.register(r'explanations', Explanation)
+router.register(r'explanations', ExplanationView)
 router.register(r'board', Board)
 router.register(r'level', Level)
 router.register(r'paper', Paper)

@@ -152,7 +152,6 @@ class Explanation(VoteModel, models.Model):
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE,
                                  related_name="explanations", verbose_name=_("Question"))
-    excerpt = models.TextField(_("Excerpt"), null=True, blank=True)
     content = models.TextField(_("Body"))
     published = models.DateTimeField(_("Published On"), default=timezone.now)
     updated = models.DateTimeField(

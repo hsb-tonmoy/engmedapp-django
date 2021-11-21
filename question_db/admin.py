@@ -114,13 +114,13 @@ class ExplanationAdmin(admin.ModelAdmin):
     ordering = ('-published',)
     list_display = ('id', '__str__', 'author', 'published', 'status')
     fieldsets = (
-        (None, {'fields': ('question', 'excerpt', 'content',)}),
+        (None, {'fields': ('question', 'content',)}),
         (None, {'fields': ('published', 'author', 'status')})
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('question', 'excerpt', 'content', 'published', 'author', 'status')}
+            'fields': ('question', 'content', 'published', 'author', 'status')}
          ),
     )

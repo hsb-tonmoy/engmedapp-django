@@ -1,4 +1,6 @@
 from rest_framework import generics, viewsets
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework import filters as f
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
@@ -84,14 +86,20 @@ class SingleQuestionUpdate(generics.UpdateAPIView):
     lookup_field = 'slug'
 
 
-class Explanation(viewsets.ModelViewSet, VoteMixin):
+class ExplanationView(viewsets.ModelViewSet, VoteMixin):
     permission_classes = [ExplanationPermissions,
                           DjangoModelPermissionsOrAnonReadOnly]
     queryset = Explanation.objects.all()
     serializer_class = ExplanationSerializer
 
-    def create(self, request):
-        serializer = ExplanationCreateSerializer
+    create_serializer_class = ExplanationCreateSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            if hasattr(self, 'create_serializer_class'):
+                return self.create_serializer_class
+
+        return super(ExplanationView, self).get_serializer_class()
 
 
 class CommentList(generics.ListCreateAPIView):
