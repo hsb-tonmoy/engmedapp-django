@@ -65,7 +65,7 @@ class ExplanationListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Explanation
-        fields = ('question', 'author', 'content',
+        fields = ('id', 'question', 'author', 'content',
                   'published', 'status', 'comments')
 
 
