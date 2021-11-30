@@ -7,6 +7,8 @@ from rest_framework.permissions import DjangoModelPermissions, DjangoModelPermis
 from vote.views import VoteMixin
 from django_filters import rest_framework as filters
 from taggit.models import Tag
+
+from .filters import QuestionFilterSet
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
 from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, QuestionUpdateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationSerializer, ExplanationCreateSerializer, CommentListSerializer, TagSerializer
 from .permissions import ExplanationPermissions
@@ -52,10 +54,11 @@ class QuestionPagination(PageNumberPagination):
 
 
 class QuestionList(generics.ListAPIView):
-    queryset = Question.objects.filter(status='published')
+    queryset = Question.objects.all()
     serializer_class = QuestionListSerializer
     pagination_class = QuestionPagination
     filter_backends = (filters.DjangoFilterBackend, f.OrderingFilter,)
+    filterset_class = QuestionFilterSet
     filter_fields = {
         'board__name': ["in", "exact"],
         'level__name': ["in", "exact"],
