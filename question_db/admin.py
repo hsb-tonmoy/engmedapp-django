@@ -92,11 +92,11 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ('status', 'board', 'level', 'paper', 'year', 'session')
     ordering = ('-published',)
     list_display = ('title', 'author', 'slug', 'board',
-                    'level', 'paper', 'year', 'session', 'status')
+                    'level', 'paper', 'year', 'session', 'status',)
     fieldsets = (
         (None, {'fields': ('title', 'board', 'level', 'paper',
          'year', 'session', 'excerpt', 'content', 'verified_explanation', 'tags', 'status')}),
-        (None, {'fields': ('published', 'author')})
+        (None, {'fields': ('published', 'author',)})
     )
 
     add_fieldsets = (

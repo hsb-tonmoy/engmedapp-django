@@ -10,6 +10,13 @@ from accounts.models import Accounts
 from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
+from django.contrib.postgres.search import SearchVector
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 class Board(models.Model):
     class Meta:
@@ -90,12 +97,6 @@ class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
 
 class Question(models.Model):
 
-    class Meta:
-
-        verbose_name = _("Question")
-        verbose_name_plural = _("Questions")
-        ordering = ('-published',)
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     board = models.ForeignKey(Board, on_delete=models.DO_NOTHING,
@@ -129,6 +130,18 @@ class Question(models.Model):
         Accounts, on_delete=models.DO_NOTHING, related_name="questions")
     status = models.CharField(_("Status"),
                               max_length=10, choices=ONSAVE_OPTIONS, default='published')
+
+    search_vector = SearchVectorField(null=True, blank=True)
+
+    class Meta:
+
+        verbose_name = _("Question")
+        verbose_name_plural = _("Questions")
+        ordering = ('-published',)
+
+        indexes = [
+            GinIndex(fields=['search_vector'], name='search_vector_index')
+        ]
 
     def __str__(self):
         return self.title
@@ -197,3 +210,13 @@ class Comment(MPTTModel):
 
     def __str__(self):
         return f"Comment by {self.author} on {self.explanation}"
+
+
+@receiver(post_save, sender=Question, dispatch_uid='on_question_save')
+def on_question_save(sender, instance, *args, **kwargs):
+    sender.objects.filter(pk=instance.id).update(search_vector=(
+        SearchVector('title', weight='A') +
+        SearchVector('excerpt', weight='A') +
+        SearchVector('content', weight='A') +
+        SearchVector('verified_explanation', weight='B')
+    ))

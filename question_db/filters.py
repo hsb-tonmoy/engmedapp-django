@@ -15,12 +15,6 @@ class QuestionFilterSet(FilterSet):
             Q(search_vector=SearchQuery(value))
         )
         return queryset.annotate(
-            search_vector=(
-                SearchVector('title', weight='A') +
-                SearchVector('excerpt', weight='A') +
-                SearchVector('content', weight='A') +
-                SearchVector('verified_explanation', weight='B')
-            ),
             search_rank=SearchRank(F('search_vector'), SearchQuery(value))
         ).filter(search_query).order_by('-search_rank', 'id')
 
