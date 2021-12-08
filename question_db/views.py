@@ -59,15 +59,6 @@ class QuestionList(generics.ListAPIView):
     pagination_class = QuestionPagination
     filter_backends = (filters.DjangoFilterBackend, f.OrderingFilter,)
     filterset_class = QuestionFilterSet
-    filter_fields = {
-        'board__name': ["in", "exact"],
-        'level__name': ["in", "exact"],
-        'paper__name': ["in", "exact"],
-        'year__name': ["in", "exact"],
-        'session__name': ["in", "exact"],
-        'tags__name': ["in", "exact"],
-        'author__username': ["in", "exact"],
-    }
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 

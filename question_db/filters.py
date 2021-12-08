@@ -21,4 +21,4 @@ class QuestionFilterSet(FilterSet):
     class Meta:
         model = Question
         fields = ('query', 'board__name', 'level__name',
-                  'paper__name', 'year__name', 'session__name')
+                  'paper__name', 'year__name', 'session__name', 'tags__name', 'author__username',)
