@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from autoslug import AutoSlugField
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
@@ -23,6 +24,9 @@ class Teacher(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     account = models.ForeignKey(Accounts, on_delete=models.DO_NOTHING, blank=True, null=True,
                                 related_name="teacher_db", verbose_name=_("Account"))
+
+    slug = AutoSlugField(_("Slug"), populate_from=['first_name', 'last_name'],
+                         editable=True, unique_with=['first_name', 'last_name'])
 
     status = models.CharField(_("Status"),
                               max_length=10, choices=ONSAVE_OPTIONS, default='published')
