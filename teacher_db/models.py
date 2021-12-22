@@ -1,6 +1,9 @@
 import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
+from random import randint
 
 from accounts.models import Accounts
 
@@ -18,7 +21,7 @@ class Teacher(models.Model):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    account = models.ForeignKey(Accounts, on_delete=models.DO_NOTHING,
+    account = models.ForeignKey(Accounts, on_delete=models.DO_NOTHING, blank=True, null=True,
                                 related_name="teacher_db", verbose_name=_("Account"))
 
     status = models.CharField(_("Status"),
@@ -29,6 +32,17 @@ class Teacher(models.Model):
     first_name = models.CharField(_('First Name'), max_length=255)
     last_name = models.CharField(_('Last Name'), max_length=255)
     date_of_birth = models.DateField(_("Date of Birth"), null=True, blank=True)
+
+    def upload_to_path(instance, filename):
+        extension = filename.split(".")[-1].lower()
+        file_id = randint(10000000, 99999999)
+        path = f'teachers/{file_id}_{instance.first_name}.png'
+        return path
+
+    profile_pic = ProcessedImageField(upload_to=upload_to_path,
+                                      processors=[ResizeToFill(270, 270)],
+                                      format='PNG',
+                                      options={'quality': 60}, default='profiles/avatar.png', null=True, blank=True)
 
     GENDER = (
         (1, 'Male'),
