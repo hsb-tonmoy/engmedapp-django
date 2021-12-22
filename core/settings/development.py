@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'taggit_serializer',
     'accounts',
     'question_db',
+    'teacher_db',
     'media_lib'
 ]
 
