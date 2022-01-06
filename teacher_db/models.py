@@ -87,10 +87,14 @@ class Teacher(models.Model):
     highest_degree = models.CharField(
         _('Highest Degree'), max_length=255, blank=True, null=True)
 
-    # Teaching Information
+    # Tuition Information
+
+    working_experience = models.TextField(
+        _('Working Experience'), blank=True, null=True)
 
     subjects_taught = models.TextField(
         _('Subjects Taught'), blank=True, null=True)
+
     years_experience = models.CharField(
         _('Years of experience'), max_length=10, blank=True, null=True)
 
@@ -100,11 +104,17 @@ class Teacher(models.Model):
     preferred_mode_of_teaching = models.CharField(
         _('Preferred mode of teaching'), max_length=255, blank=True, null=True)  # online, offline, both
 
+    expected_salary = models.CharField(
+        _('Expected salary'), max_length=255, blank=True, null=True)
+
     preferred_mode_of_payment = models.CharField(
         _('Preferred mode of payment'), max_length=255, blank=True, null=True)  # $amount + per hour / per lecture / per month
 
     preferred_language = models.CharField(
         _('Preferred Language'), max_length=255, blank=True, null=True)
+
+    hour_of_operation = models.CharField(
+        _('Hour pf operation'), max_length=255, blank=True, null=True)
 
     special_note = models.TextField(
         _('Special Note'), blank=True, null=True)
