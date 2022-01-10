@@ -48,10 +48,15 @@ class UserSerializer(UserSerializer):
 
 
 class AccountSerializer(serializers.ModelSerializer):
+    explanations_count = serializers.IntegerField(
+        source='explanations.count',
+        read_only=True
+    )
+
     class Meta:
         model = User
         fields = ('id', 'email', 'username',
-                  'first_name', 'last_name', 'date_joined', 'account_type', 'is_verified', 'is_blocked')
+                  'first_name', 'last_name', 'date_joined', 'account_type', 'is_verified', 'is_blocked', 'explanations_count')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
