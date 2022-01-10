@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
+from .models import Board, Bookmarks, Level, Paper, Year, Session, Question, Explanation, Comment
 
 # Register your models here.
 
@@ -124,3 +124,9 @@ class ExplanationAdmin(admin.ModelAdmin):
             'fields': ('question', 'content', 'published', 'author', 'status')}
          ),
     )
+
+
+@admin.register(Bookmarks)
+class BookmarkAdmin(admin.ModelAdmin):
+    search_fields = ('user',)
+    list_display = ('id', 'user', 'question', 'added')

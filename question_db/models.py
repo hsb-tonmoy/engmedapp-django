@@ -182,6 +182,24 @@ class Explanation(VoteModel, models.Model):
         return f"Explanation for {self.question} by {self.author}"
 
 
+class Bookmarks(models.Model):
+    class Meta:
+        verbose_name = _("Bookmark")
+        verbose_name_plural = _("Bookmarks")
+        ordering = ('-added',)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    question = models.ForeignKey(Question,
+                                 related_name="bookmarks", on_delete=models.CASCADE, verbose_name=_("Question"))
+    user = models.ForeignKey(
+        Accounts, on_delete=models.CASCADE, related_name="bookmarks")
+
+    added = models.DateTimeField(_("Bookmarked on"), default=timezone.now)
+
+    def __str__(self):
+        return f"Bookmark for {self.question} by {self.user}"
+
+
 class Comment(MPTTModel):
     class MPTTMeta:
         verbose_name = _("Comment")
