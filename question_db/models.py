@@ -152,16 +152,16 @@ class Question(ModelWithFlag):
 
     ''' Bookmark '''
 
-    FLAG_BOOKAMRK = 10
+    FLAG_BOOKMARK = '1'
 
     def bookmark_add(self, user):
-        return self.set_flag(user, status=self.FLAG_BOOKAMRK)
+        return self.set_flag(user, status=self.FLAG_BOOKMARK)
 
     def bookmark_remove(self, user):
-        return self.remove_flag(user, status=self.FLAG_BOOKAMRK)
+        return self.remove_flag(user, status=self.FLAG_BOOKMARK)
 
     def bookmark_check(self, user):
-        return self.is_flagged(user, status=self.FLAG_BOOKAMRK)
+        return self.is_flagged(user, status=self.FLAG_BOOKMARK)
 
 
 class Explanation(VoteModel, models.Model):
