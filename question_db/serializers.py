@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.fields import CurrentUserDefault
 from .models import Accounts
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
 from taggit.models import Tag
@@ -79,10 +80,21 @@ class QuestionListSerializer(TaggitSerializer, serializers.ModelSerializer):
     author = AccountSerializer(many=False, read_only=False)
     tags = TagListSerializerField()
 
+    is_bookmarked = serializers.SerializerMethodField(
+        method_name='get_is_bookmarked')
+
+    def get_is_bookmarked(self, obj):
+        request = self.context.get('request')
+        if request:
+            user = request.user
+            if user.is_authenticated:
+                return obj.bookmark_check(user)
+        return False
+
     class Meta:
         model = Question
         fields = ('id', 'board', 'level', 'paper', 'year', 'session', 'title',
-                  'excerpt', 'tags', 'published', 'slug', 'author', 'published', 'status')
+                  'excerpt', 'tags', 'published', 'slug', 'author', 'published', 'status', 'is_bookmarked')
 
 
 class SingleQuestionSerializer(TaggitSerializer, WritableNestedModelSerializer):

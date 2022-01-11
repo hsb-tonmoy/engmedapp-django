@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'vote',
     'taggit',
     'taggit_serializer',
+    'siteflags',
     'accounts',
     'question_db',
     'teacher_db',

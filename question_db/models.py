@@ -9,6 +9,7 @@ from autoslug import AutoSlugField
 from accounts.models import Accounts
 from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
+from siteflags.models import ModelWithFlag
 
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchVectorField
@@ -95,7 +96,7 @@ class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
         verbose_name_plural = _("Tags")
 
 
-class Question(models.Model):
+class Question(ModelWithFlag):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -149,8 +150,18 @@ class Question(models.Model):
     slug = AutoSlugField(_("Slug"), populate_from='title',
                          editable=True, unique_with='id')
 
-    # def get_absolute_url(self):
-    #     return reverse('question', kwargs={'slug': self.slug, 'id':self.id})
+    ''' Bookmark '''
+
+    FLAG_BOOKAMRK = 10
+
+    def bookmark_add(self, user):
+        return self.set_flag(user, status=self.FLAG_BOOKAMRK)
+
+    def bookmark_remove(self, user):
+        return self.remove_flag(user, status=self.FLAG_BOOKAMRK)
+
+    def bookmark_check(self, user):
+        return self.is_flagged(user, status=self.FLAG_BOOKAMRK)
 
 
 class Explanation(VoteModel, models.Model):
