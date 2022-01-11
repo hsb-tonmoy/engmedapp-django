@@ -53,31 +53,33 @@ class QuestionPagination(PageNumberPagination):
         return response
 
 
-class QuestionList(generics.ListAPIView):
+class QuestionView(viewsets.ModelViewSet):
     queryset = Question.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = QuestionListSerializer
     pagination_class = QuestionPagination
     filter_backends = (filters.DjangoFilterBackend, f.OrderingFilter,)
     filterset_class = QuestionFilterSet
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-
-class QuestionCreate(generics.CreateAPIView):
-    queryset = Question.objects.all()
-    serializer_class = QuestionCreateSerializer
-    permission_classes = [DjangoModelPermissions]
-
-
-class SingleQuestion(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Question.objects.all()
-    serializer_class = SingleQuestionSerializer
     lookup_field = 'slug'
 
+    retrieve_serializer_class = SingleQuestionSerializer
+    create_serializer_class = QuestionCreateSerializer
+    update_serializer_class = QuestionUpdateSerializer
 
-class SingleQuestionUpdate(generics.UpdateAPIView):
-    queryset = Question.objects.all()
-    serializer_class = QuestionUpdateSerializer
-    lookup_field = 'slug'
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            if hasattr(self, 'retrieve_serializer_class'):
+                return self.retrieve_serializer_class
+
+        elif self.action == 'create':
+            if hasattr(self, 'create_serializer_class'):
+                return self.create_serializer_class
+
+        elif self.action == 'update':
+            if hasattr(self, 'update_serializer_class'):
+                return self.update_serializer_class
+
+        return super(QuestionView, self).get_serializer_class()
 
 
 class ExplanationView(viewsets.ModelViewSet, VoteMixin):
