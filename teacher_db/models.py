@@ -1,4 +1,3 @@
-import uuid
 from django.db import models
 from autoslug import AutoSlugField
 from django.utils.translation import gettext_lazy as _
@@ -21,7 +20,6 @@ class Teacher(models.Model):
         ('trash', 'Trash'),
     )
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     account = models.ForeignKey(Accounts, on_delete=models.DO_NOTHING, blank=True, null=True,
                                 related_name="teacher_db", verbose_name=_("Account"))
 

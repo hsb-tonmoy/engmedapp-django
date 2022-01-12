@@ -1,4 +1,3 @@
-import uuid
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_delete
@@ -27,8 +26,6 @@ def upload_to_path(instance, filename):
 
 
 class Image(models.Model):
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     image = ProcessedImageField(upload_to=upload_to_path,
                                 options={'quality': 50})

@@ -15,7 +15,7 @@ def update_search_vector(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('question_db', '0004_search_vector'),
+        ('question_db', '0001_initial'),
     ]
 
     operations = [

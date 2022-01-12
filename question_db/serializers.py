@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import CurrentUserDefault
 from .models import Accounts
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
 from taggit.models import Tag

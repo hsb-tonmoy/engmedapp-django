@@ -1,4 +1,3 @@
-import uuid
 from django.db import models
 from vote.models import VoteModel
 from django.utils.translation import gettext_lazy as _
@@ -8,7 +7,6 @@ from mptt.fields import TreeForeignKey
 from autoslug import AutoSlugField
 from accounts.models import Accounts
 from taggit.managers import TaggableManager
-from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 from siteflags.models import ModelWithFlag
 
 from django.contrib.postgres.indexes import GinIndex
@@ -26,7 +24,6 @@ class Board(models.Model):
         verbose_name_plural = _("Boards")
         ordering = ["id"]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -40,7 +37,6 @@ class Level(models.Model):
         verbose_name_plural = _("Levels")
         ordering = ["name"]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -54,7 +50,6 @@ class Paper(models.Model):
         verbose_name_plural = _("Papers")
         ordering = ["name"]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -68,7 +63,6 @@ class Year(models.Model):
         verbose_name_plural = _("Years")
         ordering = ["name"]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -82,23 +76,13 @@ class Session(models.Model):
         verbose_name_plural = _("Sessions")
         ordering = ["name"]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
 
 
-class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
-
-    class Meta:
-        verbose_name = _("Tag")
-        verbose_name_plural = _("Tags")
-
-
 class Question(ModelWithFlag):
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     board = models.ForeignKey(Board, on_delete=models.DO_NOTHING,
                               related_name="questions", verbose_name=_("Board"))
@@ -111,7 +95,7 @@ class Question(ModelWithFlag):
     session = models.ForeignKey(Session, on_delete=models.DO_NOTHING,
                                 related_name="questions", verbose_name=_("Session"))
 
-    tags = TaggableManager(through=UUIDTaggedItem)
+    tags = TaggableManager()
 
     ONSAVE_OPTIONS = (
         ('draft', 'Draft'),
@@ -172,8 +156,6 @@ class Explanation(VoteModel, models.Model):
         verbose_name_plural = _("Explanations")
         ordering = ('-published',)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
     question = models.ForeignKey(Question, on_delete=models.CASCADE,
                                  related_name="explanations", verbose_name=_("Question"))
     content = models.TextField(_("Body"))
@@ -193,31 +175,11 @@ class Explanation(VoteModel, models.Model):
         return f"Explanation for {self.question} by {self.author}"
 
 
-class Bookmarks(models.Model):
-    class Meta:
-        verbose_name = _("Bookmark")
-        verbose_name_plural = _("Bookmarks")
-        ordering = ('-added',)
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    question = models.ForeignKey(Question,
-                                 related_name="bookmarks", on_delete=models.CASCADE, verbose_name=_("Question"))
-    user = models.ForeignKey(
-        Accounts, on_delete=models.CASCADE, related_name="bookmarks")
-
-    added = models.DateTimeField(_("Bookmarked on"), default=timezone.now)
-
-    def __str__(self):
-        return f"Bookmark for {self.question} by {self.user}"
-
-
 class Comment(MPTTModel):
     class MPTTMeta:
         verbose_name = _("Comment")
         verbose_name_plural = _("Comments")
         order_insertion_by = ['published']
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     explanation = models.ForeignKey(Explanation, on_delete=models.CASCADE,
                                     related_name="comments", verbose_name=_("Explanation"))
