@@ -149,6 +149,11 @@ class QuestionUpdateSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(
         queryset=Accounts.objects.all(), many=False)
 
+    title = serializers.CharField(required=False)
+    excerpt = serializers.CharField(required=False)
+    content = serializers.CharField(required=False)
+    verified_explanation = serializers.CharField(required=False)
+
     class Meta:
         model = Question
         fields = ("title", "excerpt", "content", "verified_explanation", "status", "board", "level",
