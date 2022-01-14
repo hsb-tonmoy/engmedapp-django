@@ -1,9 +1,9 @@
+from django.contrib.auth import get_user_model
 from rest_framework import generics, viewsets
-from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import filters as f
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly, IsAuthenticatedOrReadOnly
 from vote.views import VoteMixin
 from django_filters import rest_framework as filters
 from taggit.models import Tag
@@ -12,6 +12,8 @@ from .filters import QuestionFilterSet
 from .models import Board, Level, Paper, Year, Session, Question, Explanation, Comment
 from .serializers import BoardSerializer, ExplanationCreateSerializer, LevelSerializer, PaperSerializer, QuestionCreateSerializer, QuestionUpdateSerializer, YearSerializer, SessionSerializer, QuestionListSerializer, SingleQuestionSerializer, ExplanationSerializer, ExplanationCreateSerializer, CommentListSerializer, TagSerializer
 from .permissions import ExplanationPermissions
+
+User = get_user_model()
 
 
 class Board(viewsets.ModelViewSet):
@@ -80,6 +82,25 @@ class QuestionView(viewsets.ModelViewSet):
                 return self.update_serializer_class
 
         return super(QuestionView, self).get_serializer_class()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        if request.query_params:
+            if request.query_params.get('bookmark'):
+                user = User.objects.get(
+                    username=request.query_params.get('bookmark'))
+                question_ids = [flag.object_id for flag in Question.get_flags_for_types(
+                    [Question], user=user, status=1)[Question]]
+                queryset = Question.objects.filter(id__in=question_ids)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
